@@ -29,13 +29,7 @@ try {
         if(isset($_GET['max_id']) && $i == 0){
             continue;
         }
-        if(isset($_GET['min_id']) > $tweet->id_str){
-            //continue;
-        }
-        if (!empty($tweet->extended_entities->media[0])) {
-            $picture = $tweet->extended_entities->media[0]->media_url;
-        }
-        if (isset($picture)) {
+        if (isset($tweet->extended_entities->media[0]->media_url)) {
             foreach ($tweet->extended_entities->media as $key => $value) {
                 if (!isset($tweet->retweeted_status)){
                     $screen_name = $tweet->user->screen_name;
@@ -59,20 +53,22 @@ try {
                               </a>
                           </div>
                           <div class="media-body">
-                              <b>'.h($name).'</b>
+                              <b>'.$name.'</b>
                               <br>
-                             '.h($tweet->text).'
+                             '.$tweet->text.'
                           </div>
                         </div>
                       </div>
                     </div>
                     ';
+                //echo storage_request($id_bigint,$tweet->id,$key,$value->media_url)."<br>";
+                    //storage_request($id_bigint,$tweet->id,$key,$value->media_url)
             }
         }
     }
 } catch (TwistException $e) {
     // エラーを表示
     echo "[{$e->getCode()}] {$e->getMessage()}";
-    header("HTTP/1.1 500 Internal Server Error");
+    //header("HTTP/1.1 500 Internal Server Error");
     exit;
 }
