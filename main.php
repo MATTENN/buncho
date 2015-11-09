@@ -3,10 +3,8 @@ require_once 'lib/TwistOAuth.phar';
 require_once 'config.php';
 require_once 'token.php';
 
-// Start session.
 session_start();
 
-// If user is not logined, redirect to the login page.
 if (!isset($_SESSION['logined'])) {
     $url = WEBSITE_URL;
     header("Location: $url");
@@ -14,31 +12,21 @@ if (!isset($_SESSION['logined'])) {
     exit("Redirecting to $url ...");
 }
 
-// Set default HTTP status code.
 $code = 200;
 
 try {
     $to = $_SESSION['to'];
     $user_statues = $to->get('account/verify_credentials');
-    //userdata_controller($user_statues->id,$user_statues->screen_name);
-
 } catch (TwistException $e) {
 
-    // Set error message.
     $message = array('red', $e->getMessage());
 
-    // Overwrite HTTP status code.
-    // The exception code will be zero when it thrown before accessing Twitter, we need to change it into 500.
     $code = $e->getCode() ?: 500;
 
 }
 
-
-
-// Send charset and HTTP status code to your browser.
 header('Content-Type: text/html; charset=utf-8', true, $code);
 ?>
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
